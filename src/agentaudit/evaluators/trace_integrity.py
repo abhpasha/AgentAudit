@@ -65,7 +65,7 @@ class TraceIntegrityEvaluator:
         timestamps = [step.timestamp for step in trace.steps]
         if all(
             current <= following
-            for current, following in zip(timestamps, timestamps[1:])
+            for current, following in zip(timestamps, timestamps[1:], strict=False)
         ):
             checks_passed += 1
         else:
