@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from agentaudit import Evidence, EvaluationResult, Scenario, Trace, TraceStep
+from agentaudit import EvaluationResult, Evidence, Scenario, Trace, TraceStep
 
 
 def test_scenario_accepts_valid_configuration() -> None:
