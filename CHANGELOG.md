@@ -17,6 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Added deterministic `HumanApprovalEvaluator` with protected-tool, matching-ID, denial, and ordering checks.
 - Added public approval action constants for requested, granted, and denied events.
 - Added human-approval regression tests for valid, missing, late, denied, mismatched, and run-wide approval policies.
+- Added deterministic `LatencyEvaluator` for total, step-level, and per-tool latency budgets.
+- Added explicit observability failures for missing latency measurements under active budgets.
+- Added latency regression tests for within-budget, over-budget, missing, combined-policy, and JSON-serialisation cases.
 
 ### Documentation
 
@@ -24,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Added the proposed v0.2 public API contract.
 - Updated the README to show the first Milestone 2 implementation slice.
 - Documented deterministic human-approval semantics and marked Issue #2 implemented.
+- Documented latency-budget semantics and marked Issue #3 implemented.
 
 ## [0.1.0] - 2026-09-27
 
