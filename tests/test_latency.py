@@ -1,10 +1,9 @@
-from datetime import datetime, timedelta, timezone
 import json
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
 from agentaudit import LatencyEvaluator, Scenario, Trace, TraceStep
-
 
 START = datetime(2026, 9, 27, 12, 0, tzinfo=timezone.utc)
 
