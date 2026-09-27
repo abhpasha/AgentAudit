@@ -14,12 +14,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Extended `Trace` with evidence storage and helper properties.
 - Added deterministic `TraceIntegrityEvaluator` for cross-record trace invariants.
 - Added v0.2 model serialisation and trace-integrity regression tests.
+- Added deterministic `HumanApprovalEvaluator` with protected-tool, matching-ID, denial, and ordering checks.
+- Added public approval action constants for requested, granted, and denied events.
+- Added human-approval regression tests for valid, missing, late, denied, mismatched, and run-wide approval policies.
 
 ### Documentation
 
 - Added a concrete Milestone 2 governance and reliability specification.
 - Added the proposed v0.2 public API contract.
 - Updated the README to show the first Milestone 2 implementation slice.
+- Documented deterministic human-approval semantics and marked Issue #2 implemented.
 
 ## [0.1.0] - 2026-09-27
 

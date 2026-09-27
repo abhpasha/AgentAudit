@@ -5,7 +5,7 @@ Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framewor
 ## Implementation status
 
 - [x] Issue #1 — core model extensions and `TraceIntegrityEvaluator`
-- [ ] Issue #2 — human approval evaluator
+- [x] Issue #2 — human approval evaluator
 - [ ] Issue #3 — latency budget evaluator
 - [ ] Issue #4 — execution failure and retry evaluator
 - [ ] Issue #5 — evidence provenance and grounding evaluator
@@ -52,7 +52,15 @@ Standard action types:
 - `human_approval_granted`
 - `human_approval_denied`
 
-`HumanApprovalEvaluator` should verify that approval is granted before protected actions, request/grant IDs match, denied approvals are not treated as grants, and protected execution does not continue after denial.
+`HumanApprovalEvaluator` verifies that approval is granted before protected actions, request/grant IDs match, denied approvals are not treated as grants, and protected execution does not continue after denial.
+
+Approval semantics are deterministic:
+
+- `approval_required_before` protects only the named tool calls.
+- If `requires_human_approval=True` and no explicit protected tools are listed, every tool call is protected.
+- A valid approval requires `human_approval_requested` followed by `human_approval_granted` with the same `approval_id`.
+- A protected tool call may optionally set `approval_id` to require a specific approval.
+- A denial occurring after a grant and before the protected action invalidates that approval for the action.
 
 ### 3. Latency budgets
 
@@ -117,7 +125,7 @@ Weighted scoring is intentionally deferred.
 
 1. Extend core models and JSON serialisation. ✅
 2. Implement `TraceIntegrityEvaluator`. ✅
-3. Implement `HumanApprovalEvaluator`.
+3. Implement `HumanApprovalEvaluator`. ✅
 4. Implement `LatencyEvaluator`.
 5. Implement `ExecutionFailureEvaluator`.
 6. Implement `EvidenceGroundingEvaluator`.

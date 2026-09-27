@@ -3,6 +3,7 @@
 from .api import evaluate
 from .evaluators import (
     Evaluator,
+    HumanApprovalEvaluator,
     ToolSelectionEvaluator,
     ToolSequenceEvaluator,
     TraceIntegrityEvaluator,
@@ -10,6 +11,9 @@ from .evaluators import (
 from .models import (
     EvaluationResult,
     Evidence,
+    HUMAN_APPROVAL_DENIED,
+    HUMAN_APPROVAL_GRANTED,
+    HUMAN_APPROVAL_REQUESTED,
     JSONValue,
     Scenario,
     Trace,
@@ -23,6 +27,10 @@ __all__ = [
     "Evidence",
     "EvaluationResult",
     "Evaluator",
+    "HUMAN_APPROVAL_DENIED",
+    "HUMAN_APPROVAL_GRANTED",
+    "HUMAN_APPROVAL_REQUESTED",
+    "HumanApprovalEvaluator",
     "JSONValue",
     "Runner",
     "Scenario",
