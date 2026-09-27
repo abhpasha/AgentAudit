@@ -2,7 +2,7 @@
 
 AgentAudit is an open-source, framework-agnostic Python toolkit for evaluating and governing agentic AI systems. It is designed to test not only what an agent returns, but also **how the agent got there**: which tools it selected, the order in which tools were called, execution evidence, policy constraints, latency, failures, and other trace-level behaviour.
 
-> **Status:** v0.1 foundation. This milestone intentionally contains a small deterministic core rather than framework integrations or model-based judges.
+> **Status:** v0.1 foundation is complete and CI is green across Python 3.10–3.13. Milestone 2 is specified and not yet implemented.
 
 ## Problem statement
 
@@ -133,7 +133,7 @@ python -m build
 
 ## Roadmap
 
-### Milestone 1 — v0.1 foundation
+### Milestone 1 — v0.1 foundation ✅
 
 - Core scenario and trace models
 - JSON trace serialisation
@@ -141,9 +141,18 @@ python -m build
 - Deterministic tool-selection and tool-sequence evaluation
 - Tests, packaging, CI, and project governance documents
 
-### Milestone 2 — trace policy and governance primitives
+### Milestone 2 — v0.2 governance and reliability
 
-Planned next work should deepen the framework-agnostic core before adding vendor integrations: human-approval checks, error/failure evaluation, latency budgets, trace validation, reusable evaluation suites, and a stable adapter contract.
+Milestone 2 is specified but not implemented. It adds:
+
+- trace integrity validation
+- human-approval policy checks
+- latency budgets
+- execution failure and retry policy
+- evidence provenance and grounding checks
+- reusable evaluation suites
+
+See [Milestone 2 specification](docs/MILESTONE_2.md) and the [proposed v0.2 API](docs/V0_2_API.md).
 
 ### Later milestones
 
@@ -155,7 +164,7 @@ Planned next work should deepen the framework-agnostic core before adding vendor
 - Benchmark datasets
 - CLI workflows
 
-These features are intentionally **not** implemented in v0.1.
+These later features remain intentionally out of scope while the framework-agnostic core is still being stabilised.
 
 ## Contributing
 
