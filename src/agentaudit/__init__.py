@@ -9,11 +9,11 @@ from .evaluators import (
     TraceIntegrityEvaluator,
 )
 from .models import (
-    EvaluationResult,
-    Evidence,
     HUMAN_APPROVAL_DENIED,
     HUMAN_APPROVAL_GRANTED,
     HUMAN_APPROVAL_REQUESTED,
+    EvaluationResult,
+    Evidence,
     JSONValue,
     Scenario,
     Trace,
