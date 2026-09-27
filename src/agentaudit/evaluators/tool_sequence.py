@@ -17,18 +17,16 @@ class ToolSequenceEvaluator:
         actual = trace.tool_names
 
         if not expected:
-            expected_json: list[JSONValue] = []
-            actual_json: list[JSONValue] = [tool for tool in actual]
-            metadata: dict[str, JSONValue] = {
-                "expected_sequence": expected_json,
-                "actual_sequence": actual_json,
+            no_expectation_metadata: dict[str, JSONValue] = {
+                "expected_sequence": [],
+                "actual_sequence": [tool for tool in actual],
             }
             return EvaluationResult(
                 evaluator_name=self.name,
                 score=1.0,
                 passed=True,
                 summary="No expected tool sequence configured.",
-                metadata=metadata,
+                metadata=no_expectation_metadata,
             )
 
         passed = actual == expected
