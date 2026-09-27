@@ -8,8 +8,8 @@ from .evaluators import (
     TraceIntegrityEvaluator,
 )
 from .models import (
-    Evidence,
     EvaluationResult,
+    Evidence,
     JSONValue,
     Scenario,
     Trace,
