@@ -2,7 +2,7 @@
 
 AgentAudit is an open-source, framework-agnostic Python toolkit for evaluating and governing agentic AI systems. It is designed to test not only what an agent returns, but also **how the agent got there**: which tools it selected, the order in which tools were called, execution evidence, policy constraints, latency, failures, and other trace-level behaviour.
 
-> **Status:** v0.1 foundation is complete and CI is green across Python 3.10–3.13. Milestone 2 is specified and not yet implemented.
+> **Status:** v0.1 is complete. Milestone 2 implementation has started with core governance model extensions and deterministic trace-integrity evaluation.
 
 ## Problem statement
 
@@ -94,30 +94,37 @@ Scenario
    │                       │
    └──────── Trace ◄───────┘
               │
+              ├── TraceStep[]
+              └── Evidence[]
+              │
               ▼
       deterministic evaluators
-         │              │
-         ▼              ▼
- ToolSelection     ToolSequence
-         │              │
-         └──── EvaluationResult
+        │        │         │
+        ▼        ▼         ▼
+   Integrity  Selection  Sequence
+        │        │         │
+        └──── EvaluationResult
 ```
 
 ### Core models
 
-- `Scenario` describes test inputs and behavioural expectations.
-- `TraceStep` captures one timestamped action, including optional tool input/output, latency, errors, and metadata.
-- `Trace` contains ordered steps plus execution timing and exposes tool calls in execution order.
+- `Scenario` describes test inputs and behavioural/governance expectations.
+- `Evidence` stores framework-neutral provenance with source, content, optional URI/hash, retrieval time, and metadata.
+- `TraceStep` captures one timestamped action plus evidence references, approval linkage, and structured retry/error fields.
+- `Trace` contains ordered steps, execution timing, evidence, and helper views for tools, errors, evidence, and final outputs.
 - `EvaluationResult` is the stable output contract for evaluators.
 
 ### Execution boundary
 
 `Runner` and `Agent` are Python protocols. The built-in `BasicRunner` works with any agent implementing `run(scenario) -> Trace`. Future integrations can implement `Runner` without changing the core models or evaluators.
 
-### Deterministic evaluators in v0.1
+### Deterministic evaluators
 
 - `ToolSelectionEvaluator` checks expected tools, forbidden tools, and `max_tool_calls`.
 - `ToolSequenceEvaluator` requires an exact ordered match when `expected_tool_sequence` is configured.
+- `TraceIntegrityEvaluator` validates trace identity, ordering, time bounds, evidence references, tool-call structure, approval IDs, retry attempts, and structured errors.
+
+`TraceIntegrityEvaluator` is available explicitly during the incremental v0.2 implementation. The default `evaluate(...)` evaluator set remains unchanged for v0.1 compatibility until the v0.2 orchestration work is complete.
 
 Repeated calls are retained in the trace. They are reported by tool-selection evaluation but are not automatically failures: retries can be legitimate. They fail when they violate a declared sequence or call limit.
 
@@ -141,16 +148,23 @@ python -m build
 - Deterministic tool-selection and tool-sequence evaluation
 - Tests, packaging, CI, and project governance documents
 
-### Milestone 2 — v0.2 governance and reliability
+### Milestone 2 — v0.2 governance and reliability 🚧
 
-Milestone 2 is specified but not implemented. It adds:
+Implemented in the first v0.2 slice:
 
-- trace integrity validation
-- human-approval policy checks
-- latency budgets
-- execution failure and retry policy
-- evidence provenance and grounding checks
-- reusable evaluation suites
+- `Evidence` provenance model
+- governance policy fields on `Scenario`
+- evidence/approval/failure/retry fields on `TraceStep`
+- evidence storage and helper properties on `Trace`
+- deterministic `TraceIntegrityEvaluator`
+
+Remaining Milestone 2 work:
+
+- human-approval policy evaluation
+- latency budget evaluation
+- execution failure and retry evaluation
+- evidence grounding evaluation
+- reusable evaluation suites and richer result API
 
 See [Milestone 2 specification](docs/MILESTONE_2.md) and the [proposed v0.2 API](docs/V0_2_API.md).
 
