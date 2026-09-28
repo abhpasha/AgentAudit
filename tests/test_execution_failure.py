@@ -4,7 +4,6 @@ import pytest
 
 from agentaudit import ExecutionFailureEvaluator, Scenario, Trace, TraceStep
 
-
 START = datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc)
 
 
