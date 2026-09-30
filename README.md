@@ -2,7 +2,7 @@
 
 AgentAudit is an open-source, framework-agnostic Python toolkit for evaluating and governing agentic AI systems. It is designed to test not only what an agent returns, but also **how the agent got there**: which tools it selected, the order in which tools were called, execution evidence, policy constraints, latency, failures, and other trace-level behaviour.
 
-> **Status:** v0.1 is complete. Milestone 2 now includes core governance models plus deterministic trace-integrity, human-approval, latency-budget, and execution-failure/retry evaluation.
+> **Status:** v0.1 is complete. Milestone 2 now includes core governance models plus deterministic trace-integrity, human-approval, latency-budget, execution-failure/retry, and evidence-provenance evaluation.
 
 ## Problem statement
 
@@ -126,6 +126,7 @@ Scenario
 - `HumanApprovalEvaluator` checks that protected tool calls are preceded by a matching request/grant pair and rejects late, denied, or mismatched approvals.
 - `LatencyEvaluator` checks wall-clock, per-step, and per-tool latency budgets and reports missing latency observations explicitly.
 - `ExecutionFailureEvaluator` checks error budgets, error-type allowlists, explicit retry sequencing, retryability, and per-tool retry limits.
+- `EvidenceGroundingEvaluator` checks evidence identity, reference resolution, required/forbidden sources, minimum evidence, and final-output provenance without semantic judging.
 
 `TraceIntegrityEvaluator` is available explicitly during the incremental v0.2 implementation. The default `evaluate(...)` evaluator set remains unchanged for v0.1 compatibility until the v0.2 orchestration work is complete.
 
@@ -163,10 +164,10 @@ Implemented in the first v0.2 slice:
 - deterministic `HumanApprovalEvaluator`
 - deterministic `LatencyEvaluator`
 - deterministic `ExecutionFailureEvaluator`
+- deterministic `EvidenceGroundingEvaluator`
 - standard approval action constants for requested, granted, and denied events
 
 Remaining Milestone 2 work:
-- evidence grounding evaluation
 - reusable evaluation suites and richer result API
 
 See [Milestone 2 specification](docs/MILESTONE_2.md) and the [proposed v0.2 API](docs/V0_2_API.md).

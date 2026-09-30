@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Added latency regression tests for within-budget, over-budget, missing, combined-policy, and JSON-serialisation cases.
 - Added deterministic `ExecutionFailureEvaluator` for error budgets, error-type allowlists, and explicit retry policy.
 - Added execution-failure regression tests for allowed/unexpected errors, successful retries, malformed attempts, retryability, retry limits, and duplicate non-retry calls.
+- Added deterministic `EvidenceGroundingEvaluator` for evidence identity, reference resolution, source policies, minimum evidence, and final-output provenance.
+- Added evidence-grounding regression tests for required/missing/forbidden sources, valid/broken references, duplicate IDs, minimum evidence, final-output grounding, and deterministic scoring.
 
 ### Documentation
 
@@ -31,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Documented deterministic human-approval semantics and marked Issue #2 implemented.
 - Documented latency-budget semantics and marked Issue #3 implemented.
 - Documented execution-failure and retry semantics and marked Issue #4 implemented.
+- Documented deterministic evidence-provenance semantics and marked Issue #5 implemented.
 
 ## [0.1.0] - 2026-09-27
 
