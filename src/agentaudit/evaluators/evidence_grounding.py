@@ -131,18 +131,43 @@ class EvidenceGroundingEvaluator:
         passed = not findings
         score = checks_passed / checks_total if checks_total else 1.0
 
+        evidence_ids_json: list[JSONValue] = [
+            evidence_id for evidence_id in sorted(unique_evidence_ids)
+        ]
+        available_sources_json: list[JSONValue] = [
+            source for source in available_sources
+        ]
+        referenced_evidence_ids_json: list[JSONValue] = [
+            evidence_id for evidence_id in referenced_evidence_ids
+        ]
+        duplicate_evidence_ids_json: list[JSONValue] = [
+            evidence_id for evidence_id in duplicate_evidence_ids
+        ]
+        broken_references_json: list[JSONValue] = [
+            evidence_id for evidence_id in broken_references
+        ]
+        missing_required_sources_json: list[JSONValue] = [
+            source for source in missing_required_sources
+        ]
+        forbidden_sources_used_json: list[JSONValue] = [
+            source for source in forbidden_sources_used
+        ]
+        ungrounded_final_steps_json: list[JSONValue] = [
+            step_index for step_index in ungrounded_final_steps
+        ]
+
         metadata: dict[str, JSONValue] = {
             "checks_total": checks_total,
             "checks_passed": checks_passed,
             "evidence_count": evidence_count,
-            "evidence_ids": sorted(unique_evidence_ids),
-            "available_sources": available_sources,
-            "referenced_evidence_ids": referenced_evidence_ids,
-            "duplicate_evidence_ids": duplicate_evidence_ids,
-            "broken_references": broken_references,
-            "missing_required_sources": missing_required_sources,
-            "forbidden_sources_used": forbidden_sources_used,
-            "ungrounded_final_steps": ungrounded_final_steps,
+            "evidence_ids": evidence_ids_json,
+            "available_sources": available_sources_json,
+            "referenced_evidence_ids": referenced_evidence_ids_json,
+            "duplicate_evidence_ids": duplicate_evidence_ids_json,
+            "broken_references": broken_references_json,
+            "missing_required_sources": missing_required_sources_json,
+            "forbidden_sources_used": forbidden_sources_used_json,
+            "ungrounded_final_steps": ungrounded_final_steps_json,
             "missing_final_output": missing_final_output,
         }
 
