@@ -10,7 +10,6 @@ from agentaudit import (
     TraceStep,
 )
 
-
 START = datetime(2026, 9, 30, 12, 0, tzinfo=timezone.utc)
 
 
