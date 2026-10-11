@@ -11,6 +11,10 @@ from typing import Any, TypeAlias
 JSONPrimitive: TypeAlias = str | int | float | bool | None
 JSONValue: TypeAlias = JSONPrimitive | list["JSONValue"] | dict[str, "JSONValue"]
 
+HUMAN_APPROVAL_REQUESTED = "human_approval_requested"
+HUMAN_APPROVAL_GRANTED = "human_approval_granted"
+HUMAN_APPROVAL_DENIED = "human_approval_denied"
+
 
 def _validate_json_value(value: JSONValue, *, path: str = "value") -> None:
     if value is None or isinstance(value, (str, bool, int)):
