@@ -3,6 +3,7 @@
 from .api import evaluate
 from .evaluators import (
     Evaluator,
+    ExecutionFailureEvaluator,
     HumanApprovalEvaluator,
     LatencyEvaluator,
     ToolSelectionEvaluator,
@@ -28,6 +29,7 @@ __all__ = [
     "Evidence",
     "EvaluationResult",
     "Evaluator",
+    "ExecutionFailureEvaluator",
     "HUMAN_APPROVAL_DENIED",
     "HUMAN_APPROVAL_GRANTED",
     "HUMAN_APPROVAL_REQUESTED",

@@ -7,7 +7,7 @@ Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framewor
 - [x] Issue #1 — core model extensions and `TraceIntegrityEvaluator`
 - [x] Issue #2 — human approval evaluator
 - [x] Issue #3 — latency budget evaluator
-- [ ] Issue #4 — execution failure and retry evaluator
+- [x] Issue #4 — execution failure and retry evaluator
 - [ ] Issue #5 — evidence provenance and grounding evaluator
 - [ ] Issue #6 — evaluation suites and richer result API
 
@@ -84,7 +84,7 @@ Latency semantics are deterministic:
 
 `TraceStep` now supports structured `error_type`, `retryable`, and `attempt` fields.
 
-`ExecutionFailureEvaluator` will check:
+`ExecutionFailureEvaluator` checks:
 
 - total error count
 - allowed error types
@@ -92,7 +92,15 @@ Latency semantics are deterministic:
 - valid retry attempt numbers
 - retry policy compliance
 
-Duplicate tool calls alone are not automatically retries. Explicit attempt metadata is authoritative.
+Execution and retry semantics are deterministic:
+
+- `max_errors` limits the total number of steps carrying an execution error.
+- When `allowed_error_types` is non-empty, every error must declare an allowed `error_type`.
+- Retry chains are identified only by explicit `attempt` values on tool calls.
+- An explicit retry chain starts at attempt 1 and increments without gaps.
+- An attempt greater than 1 is valid only after the preceding explicit attempt failed and declared `retryable=True`.
+- `max_retries_per_tool` counts explicit attempts greater than 1 independently for each tool.
+- Duplicate tool calls without `attempt` metadata are not retries and remain governed by tool-selection policy.
 
 ### 5. Evidence grounding
 
@@ -135,7 +143,7 @@ Weighted scoring is intentionally deferred.
 2. Implement `TraceIntegrityEvaluator`. ✅
 3. Implement `HumanApprovalEvaluator`. ✅
 4. Implement `LatencyEvaluator`. ✅
-5. Implement `ExecutionFailureEvaluator`.
+5. Implement `ExecutionFailureEvaluator`. ✅
 6. Implement `EvidenceGroundingEvaluator`.
 7. Implement suite orchestration and richer result objects.
 8. Update public exports, examples, README, changelog, and tests.
