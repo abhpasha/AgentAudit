@@ -8,7 +8,7 @@ Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framewor
 - [x] Issue #2 — human approval evaluator
 - [x] Issue #3 — latency budget evaluator
 - [x] Issue #4 — execution failure and retry evaluator
-- [ ] Issue #5 — evidence provenance and grounding evaluator
+- [x] Issue #5 — evidence provenance and grounding evaluator
 - [ ] Issue #6 — evaluation suites and richer result API
 
 Issue #1 intentionally keeps the existing default `evaluate(...)` evaluator set unchanged. The new integrity evaluator is public and can be invoked explicitly until the v0.2 orchestration work is completed.
@@ -106,7 +106,7 @@ Execution and retry semantics are deterministic:
 
 The first v0.2 slice introduces a first-class `Evidence` model and evidence references from trace steps.
 
-The deterministic grounding layer will verify provenance only:
+`EvidenceGroundingEvaluator` verifies provenance only:
 
 - required evidence sources are present
 - forbidden evidence sources are absent
@@ -114,7 +114,17 @@ The deterministic grounding layer will verify provenance only:
 - minimum evidence requirements are satisfied
 - final output references evidence when required
 
-v0.2 must **not** claim semantic entailment or factual truth from natural-language outputs. LLM-based judging remains out of scope.
+Evidence semantics are deterministic:
+
+- Evidence IDs must be unique.
+- Every `TraceStep.evidence_ids` reference must resolve to an item in `Trace.evidence`.
+- `required_evidence_sources` requires each named source to be represented.
+- `forbidden_evidence_sources` fails when any named source is present.
+- `min_evidence_items` counts unique evidence IDs, so duplicate IDs cannot inflate the minimum.
+- When `require_evidence_on_final_output=True`, at least one `final_output` step must exist and every final-output step must reference evidence.
+- Evidence linkage establishes provenance only; it does not assert that natural-language claims are semantically entailed by the evidence.
+
+v0.2 does **not** claim semantic entailment or factual truth from natural-language outputs. LLM-based judging remains out of scope.
 
 ### 6. Evaluation suites
 
@@ -144,7 +154,7 @@ Weighted scoring is intentionally deferred.
 3. Implement `HumanApprovalEvaluator`. ✅
 4. Implement `LatencyEvaluator`. ✅
 5. Implement `ExecutionFailureEvaluator`. ✅
-6. Implement `EvidenceGroundingEvaluator`.
+6. Implement `EvidenceGroundingEvaluator`. ✅
 7. Implement suite orchestration and richer result objects.
 8. Update public exports, examples, README, changelog, and tests.
 9. Verify CI on Python 3.10–3.13.
