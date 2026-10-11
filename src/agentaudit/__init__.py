@@ -1,6 +1,6 @@
 """AgentAudit public API."""
 
-from .api import evaluate
+from .api import evaluate, evaluate_suite, run_evaluation
 from .evaluators import (
     Evaluator,
     EvidenceGroundingEvaluator,
@@ -16,9 +16,12 @@ from .models import (
     HUMAN_APPROVAL_GRANTED,
     HUMAN_APPROVAL_REQUESTED,
     EvaluationResult,
+    EvaluationSuite,
     Evidence,
     JSONValue,
     Scenario,
+    ScenarioEvaluation,
+    SuiteResult,
     Trace,
     TraceStep,
 )
@@ -29,6 +32,7 @@ __all__ = [
     "BasicRunner",
     "Evidence",
     "EvaluationResult",
+    "EvaluationSuite",
     "Evaluator",
     "EvidenceGroundingEvaluator",
     "ExecutionFailureEvaluator",
@@ -40,12 +44,16 @@ __all__ = [
     "LatencyEvaluator",
     "Runner",
     "Scenario",
+    "ScenarioEvaluation",
+    "SuiteResult",
     "ToolSelectionEvaluator",
     "ToolSequenceEvaluator",
     "Trace",
     "TraceIntegrityEvaluator",
     "TraceStep",
     "evaluate",
+    "evaluate_suite",
+    "run_evaluation",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

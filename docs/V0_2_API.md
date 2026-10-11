@@ -1,6 +1,6 @@
-# Proposed v0.2 Public API
+# AgentAudit v0.2 Public API
 
-This document is the implementation contract for Milestone 2. It is intentionally framework-agnostic and Python 3.10+ compatible.
+This document describes the implemented Milestone 2 public API. It remains framework-agnostic and Python 3.10+ compatible.
 
 ## Core models
 
@@ -220,16 +220,11 @@ def evaluate(
     runner: Runner | None = None,
     evaluators: Sequence[Evaluator] | None = None,
 ) -> list[EvaluationResult]:
-    """Backwards-compatible v0.1 API."""
-    return run_evaluation(
-        agent,
-        scenario,
-        runner=runner,
-        evaluators=evaluators,
-    ).results
+    """Backwards-compatible v0.1 result-list API."""
+    ...
 ```
 
-Proposed default evaluator set:
+`run_evaluation(...)` and `evaluate_suite(...)` use this default evaluator set:
 
 ```python
 _DEFAULT_EVALUATORS: tuple[Evaluator, ...] = (
@@ -246,3 +241,8 @@ _DEFAULT_EVALUATORS: tuple[Evaluator, ...] = (
 ## Compatibility rule
 
 New fields should be appended to existing dataclasses rather than inserted before v0.1 fields. This preserves existing positional construction as far as practical during the pre-1.0 period.
+
+
+## Backwards compatibility
+
+`evaluate(agent, scenario)` continues to use the v0.1 default pair of `ToolSelectionEvaluator` and `ToolSequenceEvaluator` when no evaluator list is supplied. This preserves the existing result-list behaviour. Use `run_evaluation(...)` for the full v0.2 governance set and richer `ScenarioEvaluation` result, or `evaluate_suite(...)` for regression suites.

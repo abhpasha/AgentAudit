@@ -502,3 +502,133 @@ class EvaluationResult:
             sort_keys=True,
             allow_nan=False,
         )
+
+
+@dataclass(slots=True)
+class EvaluationSuite:
+    """A named, non-empty collection of scenarios for regression evaluation."""
+
+    name: str
+    scenarios: list[Scenario]
+    metadata: dict[str, JSONValue] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise ValueError("EvaluationSuite name must not be empty")
+        if not self.scenarios:
+            raise ValueError("EvaluationSuite must contain at least one scenario")
+        scenario_names = [scenario.name for scenario in self.scenarios]
+        if len(scenario_names) != len(set(scenario_names)):
+            raise ValueError("EvaluationSuite scenario names must be unique")
+        _validate_json_value(self.metadata, path="metadata")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "scenarios": [scenario.to_dict() for scenario in self.scenarios],
+            "metadata": dict(self.metadata),
+        }
+
+    def to_json(self, *, indent: int | None = None) -> str:
+        return json.dumps(
+            self.to_dict(),
+            indent=indent,
+            sort_keys=True,
+            allow_nan=False,
+        )
+
+
+@dataclass(slots=True)
+class ScenarioEvaluation:
+    """Trace plus evaluator results and aggregate outcome for one scenario."""
+
+    scenario_name: str
+    trace: Trace
+    results: list[EvaluationResult]
+    passed: bool
+    score: float
+    metadata: dict[str, JSONValue] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.scenario_name.strip():
+            raise ValueError("ScenarioEvaluation scenario_name must not be empty")
+        if self.trace.scenario_name != self.scenario_name:
+            raise ValueError(
+                "ScenarioEvaluation trace.scenario_name must match scenario_name"
+            )
+        if not 0.0 <= self.score <= 1.0:
+            raise ValueError("ScenarioEvaluation score must be between 0.0 and 1.0")
+        _validate_json_value(self.metadata, path="metadata")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "scenario_name": self.scenario_name,
+            "trace": self.trace.to_dict(),
+            "results": [result.to_dict() for result in self.results],
+            "passed": self.passed,
+            "score": self.score,
+            "metadata": dict(self.metadata),
+        }
+
+    def to_json(self, *, indent: int | None = None) -> str:
+        return json.dumps(
+            self.to_dict(),
+            indent=indent,
+            sort_keys=True,
+            allow_nan=False,
+        )
+
+
+@dataclass(slots=True)
+class SuiteResult:
+    """Aggregated deterministic result for an EvaluationSuite."""
+
+    suite_name: str
+    scenario_results: list[ScenarioEvaluation]
+    passed: bool
+    score: float
+    metadata: dict[str, JSONValue] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.suite_name.strip():
+            raise ValueError("SuiteResult suite_name must not be empty")
+        if not self.scenario_results:
+            raise ValueError("SuiteResult must contain at least one scenario result")
+        if not 0.0 <= self.score <= 1.0:
+            raise ValueError("SuiteResult score must be between 0.0 and 1.0")
+        _validate_json_value(self.metadata, path="metadata")
+
+    @property
+    def total_scenarios(self) -> int:
+        return len(self.scenario_results)
+
+    @property
+    def passed_scenarios(self) -> int:
+        return sum(result.passed for result in self.scenario_results)
+
+    @property
+    def failed_scenarios(self) -> int:
+        return self.total_scenarios - self.passed_scenarios
+
+    @property
+    def pass_rate(self) -> float:
+        return self.passed_scenarios / self.total_scenarios
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "suite_name": self.suite_name,
+            "scenario_results": [
+                result.to_dict() for result in self.scenario_results
+            ],
+            "passed": self.passed,
+            "score": self.score,
+            "metadata": dict(self.metadata),
+        }
+
+    def to_json(self, *, indent: int | None = None) -> str:
+        return json.dumps(
+            self.to_dict(),
+            indent=indent,
+            sort_keys=True,
+            allow_nan=False,
+        )

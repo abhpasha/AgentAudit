@@ -9,9 +9,9 @@ Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framewor
 - [x] Issue #3 — latency budget evaluator
 - [x] Issue #4 — execution failure and retry evaluator
 - [x] Issue #5 — evidence provenance and grounding evaluator
-- [ ] Issue #6 — evaluation suites and richer result API
+- [x] Issue #6 — evaluation suites and richer result API
 
-Issue #1 intentionally keeps the existing default `evaluate(...)` evaluator set unchanged. The new integrity evaluator is public and can be invoked explicitly until the v0.2 orchestration work is completed.
+Milestone 2 is complete. `run_evaluation(...)` and `evaluate_suite(...)` use the full v0.2 deterministic evaluator set. The original `evaluate(...)` function retains the v0.1 tool-selection and tool-sequence defaults for backwards compatibility.
 
 ## Goals
 
@@ -128,7 +128,7 @@ v0.2 does **not** claim semantic entailment or factual truth from natural-langua
 
 ### 6. Evaluation suites
 
-Add:
+Implemented:
 
 - `EvaluationSuite`
 - `ScenarioEvaluation`
@@ -136,9 +136,9 @@ Add:
 - `run_evaluation(...)`
 - `evaluate_suite(...)`
 
-Keep the existing `evaluate(agent, scenario)` API backwards compatible.
+The existing `evaluate(agent, scenario)` API remains backwards compatible.
 
-Default aggregation:
+Aggregation:
 
 - scenario passes when all evaluator results pass
 - scenario score is the mean evaluator score
@@ -155,9 +155,9 @@ Weighted scoring is intentionally deferred.
 4. Implement `LatencyEvaluator`. ✅
 5. Implement `ExecutionFailureEvaluator`. ✅
 6. Implement `EvidenceGroundingEvaluator`. ✅
-7. Implement suite orchestration and richer result objects.
-8. Update public exports, examples, README, changelog, and tests.
-9. Verify CI on Python 3.10–3.13.
+7. Implement suite orchestration and richer result objects. ✅
+8. Update public exports, examples, README, changelog, and tests. ✅
+9. Verify CI on Python 3.10–3.13. ✅
 
 ## Test acceptance criteria
 

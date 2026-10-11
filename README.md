@@ -2,7 +2,7 @@
 
 AgentAudit is an open-source, framework-agnostic Python toolkit for evaluating and governing agentic AI systems. It is designed to test not only what an agent returns, but also **how the agent got there**: which tools it selected, the order in which tools were called, execution evidence, policy constraints, latency, failures, and other trace-level behaviour.
 
-> **Status:** v0.1 is complete. Milestone 2 now includes core governance models plus deterministic trace-integrity, human-approval, latency-budget, execution-failure/retry, and evidence-provenance evaluation.
+> **Status:** v0.2.0 governance and reliability milestone is complete. AgentAudit now supports deterministic trace governance, evidence provenance, richer scenario results, and reusable evaluation suites.
 
 ## Problem statement
 
@@ -41,7 +41,7 @@ pip install agentaudit
 ```python
 from datetime import UTC, datetime
 
-from agentaudit import Scenario, Trace, TraceStep, evaluate
+from agentaudit import Scenario, Trace, TraceStep, run_evaluation
 
 
 class InventoryAgent:
@@ -73,15 +73,17 @@ scenario = Scenario(
     max_tool_calls=1,
 )
 
-results = evaluate(InventoryAgent(), scenario)
-for result in results:
+evaluation = run_evaluation(InventoryAgent(), scenario)
+print(evaluation.passed, evaluation.score)
+for result in evaluation.results:
     print(result.evaluator_name, result.passed, result.score)
 ```
 
-Run the complete example with:
+Run the examples with:
 
 ```bash
 python examples/simple_agent.py
+python examples/evaluation_suite.py
 ```
 
 ## Architecture overview
@@ -113,6 +115,9 @@ Scenario
 - `TraceStep` captures one timestamped action plus evidence references, approval linkage, and structured retry/error fields.
 - `Trace` contains ordered steps, execution timing, evidence, and helper views for tools, errors, evidence, and final outputs.
 - `EvaluationResult` is the stable output contract for evaluators.
+- `ScenarioEvaluation` combines a trace with all evaluator results and aggregate pass/score values.
+- `EvaluationSuite` groups named scenarios for regression evaluation.
+- `SuiteResult` aggregates scenario-level outcomes, pass rate, and suite score.
 
 ### Execution boundary
 
@@ -128,7 +133,7 @@ Scenario
 - `ExecutionFailureEvaluator` checks error budgets, error-type allowlists, explicit retry sequencing, retryability, and per-tool retry limits.
 - `EvidenceGroundingEvaluator` checks evidence identity, reference resolution, required/forbidden sources, minimum evidence, and final-output provenance without semantic judging.
 
-`TraceIntegrityEvaluator` is available explicitly during the incremental v0.2 implementation. The default `evaluate(...)` evaluator set remains unchanged for v0.1 compatibility until the v0.2 orchestration work is complete.
+`run_evaluation(...)` and `evaluate_suite(...)` use the full v0.2 deterministic evaluator set by default. The original `evaluate(...)` function retains the v0.1 tool-selection and tool-sequence defaults for backwards compatibility.
 
 Repeated calls are retained in the trace. They are reported by tool-selection evaluation but are not automatically failures: retries can be legitimate. They fail when they violate a declared sequence or call limit.
 
@@ -152,9 +157,9 @@ python -m build
 - Deterministic tool-selection and tool-sequence evaluation
 - Tests, packaging, CI, and project governance documents
 
-### Milestone 2 — v0.2 governance and reliability 🚧
+### Milestone 2 — v0.2 governance and reliability ✅
 
-Implemented in the first v0.2 slice:
+Implemented in v0.2.0:
 
 - `Evidence` provenance model
 - governance policy fields on `Scenario`
@@ -166,11 +171,10 @@ Implemented in the first v0.2 slice:
 - deterministic `ExecutionFailureEvaluator`
 - deterministic `EvidenceGroundingEvaluator`
 - standard approval action constants for requested, granted, and denied events
+- `EvaluationSuite`, `ScenarioEvaluation`, and `SuiteResult`
+- `run_evaluation(...)` and `evaluate_suite(...)` with deterministic aggregation
 
-Remaining Milestone 2 work:
-- reusable evaluation suites and richer result API
-
-See [Milestone 2 specification](docs/MILESTONE_2.md) and the [proposed v0.2 API](docs/V0_2_API.md).
+See [Milestone 2 specification](docs/MILESTONE_2.md) and the [v0.2 API](docs/V0_2_API.md).
 
 ### Later milestones
 
