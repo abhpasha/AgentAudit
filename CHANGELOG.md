@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-11
+
 ### Added
 
 - Added the `Evidence` provenance model with strict JSON-compatible content and metadata.
@@ -24,6 +26,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Added execution-failure regression tests for allowed/unexpected errors, successful retries, malformed attempts, retryability, retry limits, and duplicate non-retry calls.
 - Added deterministic `EvidenceGroundingEvaluator` for evidence identity, reference resolution, source policies, minimum evidence, and final-output provenance.
 - Added evidence-grounding regression tests for required/missing/forbidden sources, valid/broken references, duplicate IDs, minimum evidence, final-output grounding, and deterministic scoring.
+- Added `EvaluationSuite`, `ScenarioEvaluation`, and `SuiteResult` models with JSON serialisation and validation.
+- Added `run_evaluation(...)` and `evaluate_suite(...)` with deterministic scenario and suite aggregation.
+- Added the full v0.2 default evaluator set for the richer APIs while preserving legacy `evaluate(...)` defaults.
+- Added regression-suite tests and a framework-free suite example.
 
 ### Documentation
 
@@ -34,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Documented latency-budget semantics and marked Issue #3 implemented.
 - Documented execution-failure and retry semantics and marked Issue #4 implemented.
 - Documented deterministic evidence-provenance semantics and marked Issue #5 implemented.
+- Documented suite aggregation, compatibility behaviour, and completion of Milestone 2.
 
 ## [0.1.0] - 2026-09-27
 
