@@ -2,6 +2,17 @@
 
 Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framework-agnostic core before any LangChain, LangGraph, MCP, model-provider, or LLM-as-judge integration is added.
 
+## Implementation status
+
+- [x] Issue #1 — core model extensions and `TraceIntegrityEvaluator`
+- [ ] Issue #2 — human approval evaluator
+- [ ] Issue #3 — latency budget evaluator
+- [ ] Issue #4 — execution failure and retry evaluator
+- [ ] Issue #5 — evidence provenance and grounding evaluator
+- [ ] Issue #6 — evaluation suites and richer result API
+
+Issue #1 intentionally keeps the existing default `evaluate(...)` evaluator set unchanged. The new integrity evaluator is public and can be invoked explicitly until the v0.2 orchestration work is completed.
+
 ## Goals
 
 AgentAudit v0.2 should deterministically answer:
@@ -17,9 +28,9 @@ AgentAudit v0.2 should deterministically answer:
 
 ### 1. Trace integrity
 
-Add a `TraceIntegrityEvaluator` that validates cross-record invariants that cannot be safely checked inside one dataclass alone.
+`TraceIntegrityEvaluator` validates cross-record invariants that cannot be safely checked inside one dataclass alone.
 
-Checks should include:
+Checks include:
 
 - `trace.scenario_name == scenario.name`
 - evidence IDs are unique
@@ -45,19 +56,19 @@ Standard action types:
 
 ### 3. Latency budgets
 
-Add scenario policy fields for:
+Scenario policy fields now reserve configuration for:
 
 - total trace latency
 - maximum step latency
 - per-tool latency limits
 
-`LatencyEvaluator` should evaluate configured budgets deterministically. Missing measurements must be reported explicitly; missing latency must never be interpreted as zero.
+`LatencyEvaluator` will evaluate configured budgets deterministically. Missing measurements must be reported explicitly; missing latency must never be interpreted as zero.
 
 ### 4. Execution failures and retries
 
-Use the existing `TraceStep.error` field and add structured failure information such as `error_type`, `retryable`, and `attempt`.
+`TraceStep` now supports structured `error_type`, `retryable`, and `attempt` fields.
 
-`ExecutionFailureEvaluator` should check:
+`ExecutionFailureEvaluator` will check:
 
 - total error count
 - allowed error types
@@ -69,9 +80,9 @@ Duplicate tool calls alone are not automatically retries. Explicit attempt metad
 
 ### 5. Evidence grounding
 
-Introduce a first-class `Evidence` model and evidence references from trace steps.
+The first v0.2 slice introduces a first-class `Evidence` model and evidence references from trace steps.
 
-The deterministic v0.2 grounding layer should verify provenance only:
+The deterministic grounding layer will verify provenance only:
 
 - required evidence sources are present
 - forbidden evidence sources are absent
@@ -104,8 +115,8 @@ Weighted scoring is intentionally deferred.
 
 ## Proposed implementation order
 
-1. Extend core models and JSON serialisation.
-2. Implement `TraceIntegrityEvaluator`.
+1. Extend core models and JSON serialisation. ✅
+2. Implement `TraceIntegrityEvaluator`. ✅
 3. Implement `HumanApprovalEvaluator`.
 4. Implement `LatencyEvaluator`.
 5. Implement `ExecutionFailureEvaluator`.

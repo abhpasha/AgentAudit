@@ -1,13 +1,26 @@
 """AgentAudit public API."""
 
 from .api import evaluate
-from .evaluators import Evaluator, ToolSelectionEvaluator, ToolSequenceEvaluator
-from .models import EvaluationResult, JSONValue, Scenario, Trace, TraceStep
+from .evaluators import (
+    Evaluator,
+    ToolSelectionEvaluator,
+    ToolSequenceEvaluator,
+    TraceIntegrityEvaluator,
+)
+from .models import (
+    EvaluationResult,
+    Evidence,
+    JSONValue,
+    Scenario,
+    Trace,
+    TraceStep,
+)
 from .runner import Agent, BasicRunner, Runner
 
 __all__ = [
     "Agent",
     "BasicRunner",
+    "Evidence",
     "EvaluationResult",
     "Evaluator",
     "JSONValue",
@@ -16,6 +29,7 @@ __all__ = [
     "ToolSelectionEvaluator",
     "ToolSequenceEvaluator",
     "Trace",
+    "TraceIntegrityEvaluator",
     "TraceStep",
     "evaluate",
 ]

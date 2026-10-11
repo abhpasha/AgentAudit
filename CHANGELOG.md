@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Added the `Evidence` provenance model with strict JSON-compatible content and metadata.
+- Extended `Scenario` with approval, latency, failure/retry, and evidence policy fields.
+- Extended `TraceStep` with evidence references, approval linkage, and structured error/retry fields.
+- Extended `Trace` with evidence storage and helper properties.
+- Added deterministic `TraceIntegrityEvaluator` for cross-record trace invariants.
+- Added v0.2 model serialisation and trace-integrity regression tests.
+
 ### Documentation
 
 - Added a concrete Milestone 2 governance and reliability specification.
 - Added the proposed v0.2 public API contract.
-- Updated the README to mark v0.1 complete and link to v0.2 planning documents.
+- Updated the README to show the first Milestone 2 implementation slice.
 
 ## [0.1.0] - 2026-09-27
 
