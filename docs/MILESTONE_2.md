@@ -6,7 +6,7 @@ Milestone 2 targets **AgentAudit v0.2.0**. Its purpose is to deepen the framewor
 
 - [x] Issue #1 — core model extensions and `TraceIntegrityEvaluator`
 - [x] Issue #2 — human approval evaluator
-- [ ] Issue #3 — latency budget evaluator
+- [x] Issue #3 — latency budget evaluator
 - [ ] Issue #4 — execution failure and retry evaluator
 - [ ] Issue #5 — evidence provenance and grounding evaluator
 - [ ] Issue #6 — evaluation suites and richer result API
@@ -70,7 +70,15 @@ Scenario policy fields now reserve configuration for:
 - maximum step latency
 - per-tool latency limits
 
-`LatencyEvaluator` will evaluate configured budgets deterministically. Missing measurements must be reported explicitly; missing latency must never be interpreted as zero.
+`LatencyEvaluator` evaluates configured budgets deterministically. Missing measurements are reported explicitly; missing latency is never interpreted as zero.
+
+Latency semantics are deterministic:
+
+- `max_total_latency_ms` compares wall-clock duration from `Trace.started_at` to `Trace.finished_at`.
+- `max_step_latency_ms` applies to every recorded step and requires `TraceStep.latency_ms`.
+- `tool_latency_limits_ms` applies only to matching tool calls.
+- Each applicable configured check contributes equally to the evaluator score.
+- A configured per-tool budget does not fail merely because that tool was never called; tool-presence policy remains the responsibility of tool-selection evaluation.
 
 ### 4. Execution failures and retries
 
@@ -126,7 +134,7 @@ Weighted scoring is intentionally deferred.
 1. Extend core models and JSON serialisation. ✅
 2. Implement `TraceIntegrityEvaluator`. ✅
 3. Implement `HumanApprovalEvaluator`. ✅
-4. Implement `LatencyEvaluator`.
+4. Implement `LatencyEvaluator`. ✅
 5. Implement `ExecutionFailureEvaluator`.
 6. Implement `EvidenceGroundingEvaluator`.
 7. Implement suite orchestration and richer result objects.
